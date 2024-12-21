@@ -34,14 +34,14 @@ void lexer_init(Lexer *lexer, char *_source) {
     lexer->position = 0;
     lexer->line = 1;
     lexer->column = 1;
-    lexer->tokens = motys_array_create(sizeof(Token), 32);
+    lexer->Tokens = motys_array_create(sizeof(Token), 32);
     printf("Lexer initialized\n");
 }
 
 void lexer_free(Lexer *lexer)
 {
 	// free(lexer->source); // double free?
-	motys_array_free(lexer->tokens);
+	motys_array_free(lexer->Tokens);
 }
 
 void lexer_tokenize(Lexer *lexer) {
@@ -54,7 +54,7 @@ void lexer_tokenize(Lexer *lexer) {
             if (c == '\n') {
                 Token t = {TOKEN_NEWLINE, "NewLine", lexer->line,
                            lexer->column};
-                motys_array_add(lexer->tokens, &t);
+                motys_array_add(lexer->Tokens, &t);
                 lexer->line++;
                 lexer->column = 0;
             }
@@ -73,7 +73,7 @@ void lexer_tokenize(Lexer *lexer) {
             char *value = strndup(&lexer->source[start], length);
 
             Token t = {TOKEN_IDENTIFIER, value, lexer->line, lexer->column};
-            motys_array_add(lexer->tokens, &t);
+            motys_array_add(lexer->Tokens, &t);
         } else if (isdigit(c)) {
             int start = lexer->position;
             while (isdigit(lexer->source[lexer->position]) ||
@@ -85,7 +85,7 @@ void lexer_tokenize(Lexer *lexer) {
             char *value = strndup(&lexer->source[start], length);
 
             Token t = {TOKEN_NUMBER, value, lexer->line, lexer->column};
-            motys_array_add(lexer->tokens, &t);
+            motys_array_add(lexer->Tokens, &t);
         }
         else if (is_operator(c))
         {
@@ -94,7 +94,7 @@ void lexer_tokenize(Lexer *lexer) {
           	t.value = strndup(&lexer->source[lexer->position], 1);
            	t.line = lexer->line;
             	t.column = lexer->column;
-        	motys_array_add(lexer->tokens, &t);
+        	motys_array_add(lexer->Tokens, &t);
          	lexer->position++;
         }
         else if (is_delimiter(c))
@@ -104,7 +104,7 @@ void lexer_tokenize(Lexer *lexer) {
 	  	t.value = strndup(&lexer->source[lexer->position], 1);
 	   	t.line = lexer->line;
 	    	t.column = lexer->column;
-		motys_array_add(lexer->tokens, &t);
+		motys_array_add(lexer->Tokens, &t);
 	 	lexer->position++;
 	}
         // Handle unrecognized characters
@@ -117,8 +117,8 @@ void lexer_tokenize(Lexer *lexer) {
     }
 
     // Print tokens
-    for (int i = 0; i < lexer->tokens->size; i++) {
-        Token *t = motys_array_get(lexer->tokens, i);
+    for (int i = 0; i < lexer->Tokens->size; i++) {
+        Token *t = motys_array_get(lexer->Tokens, i);
         printf("Token %d: '%s'\t(Type: %d, Line: %d, Column: %d)\n", i + 1, t->value, t->type, t->line, t->column);
     }
 

@@ -11,7 +11,7 @@ typedef struct {
 	int position;
 	int line;
 	int column;
-	MotysArray* tokens;
+	MotysArray* Tokens;
 } Lexer;
 
 char* strndup(const char* str, int n);
