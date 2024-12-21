@@ -9,8 +9,12 @@ OUTPUT = build/motys2
 # Build target
 all: $(OUTPUT)
 
+# Ensure the build directory exists
+build:
+	mkdir -p build
+
 # Linking and compilation
-$(OUTPUT): $(SRC)
+$(OUTPUT): build $(SRC)
 	$(CC) $(CFLAGS) $(SRC) -o $(OUTPUT)
 
 # Run target
@@ -19,4 +23,4 @@ run: $(OUTPUT)
 
 # Clean target
 clean:
-	rm $(OUTPUT)*
+	rm build/*
