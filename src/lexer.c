@@ -29,7 +29,7 @@ bool is_delimiter(char c)
 }
 
 void lexer_init(Lexer *lexer, char *_source) {
-    lexer->source = strdup(_source);
+    lexer->source = _source;
     lexer->length = strlen(_source);
     lexer->position = 0;
     lexer->line = 1;
@@ -40,7 +40,7 @@ void lexer_init(Lexer *lexer, char *_source) {
 
 void lexer_free(Lexer *lexer)
 {
-	free(lexer->source);
+	// free(lexer->source); // double free?
 	motys_array_free(lexer->tokens);
 }
 
@@ -52,7 +52,7 @@ void lexer_tokenize(Lexer *lexer) {
         // Handle whitespace
         if (isspace(c)) {
             if (c == '\n') {
-                Token t = {TOKEN_NEWLINE, strdup("NewLine"), lexer->line,
+                Token t = {TOKEN_NEWLINE, "NewLine", lexer->line,
                            lexer->column};
                 motys_array_add(lexer->tokens, &t);
                 lexer->line++;

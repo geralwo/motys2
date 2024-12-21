@@ -53,8 +53,8 @@ int main(int argc, char* argv[]) {
     motys_vm_init(&vm);
 
     // Free allocated memory
-    free(source_code);
     lexer_free(&lexer);
+    free(source_code);
 
 
     return 0;
